@@ -211,6 +211,7 @@ done
 
 {
   for file in "$@" ; do
+    [[ -r "$file" ]] || continue
     assert_mime_type "$file" || continue
     echo -n "Processing file $n out of $#" >&2
     playtime=$(mediainfo "--Inform=General;%Duration%" "$file")
