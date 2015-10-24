@@ -115,6 +115,20 @@ assert_mime_type() {
   if [[ "$(file -b --mime-type "$file")" =~ ^(audio)|(video) ]] ; then
     return 0
   else
+    assert_mpeg_audio "$file" && return 0 || return 1
+  fi
+}
+
+# Some mp3 files are wrongly detected as application/octet-stream by
+# file(1) due to shenanigans or particularities in the libmagic
+# configuration. This is a simple workaround using mediainfo(1), which
+# is bound to detect the correct file format since it actually parses
+# the file. It's much slower, of course.
+assert_mpeg_audio() {
+  local file=$1
+  if [[ "$(mediainfo --Inform='Audio;%Format%' "$file")" == 'MPEG Audio' ]]; then
+    return 0
+  else
     return 1
   fi
 }
