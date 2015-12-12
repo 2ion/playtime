@@ -59,7 +59,7 @@ check_dependencies() {
 
 display() {
   local secs=$1 color=$2
-  local d=$(date -u -d "@$1" +"%T")
+  local d=$(date -u -d "@$secs" +"%T")
   if [[ -n $color ]] ; then
     echo "$(color "$color" "$d")"
   else
